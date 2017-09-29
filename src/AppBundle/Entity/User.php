@@ -18,78 +18,83 @@ class User extends BaseUser
     const IS_PRIVATE = 1;
 
     /**
-    * @ORM\Id
-    * @ORM\Column(type="integer")
-    * @ORM\GeneratedValue(strategy="AUTO")
-    */
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     protected $id;
 
     /**
-    * @Gedmo\Slug(fields={"username"})
-    * @ORM\Column(length=128, unique=true)
-    */
+     * @Gedmo\Slug(fields={"username"})
+     * @ORM\Column(length=128, unique=true)
+     */
     private $slug;
 
     /**
-    * @ORM\Column(type="string", nullable=true)
-    *
-    * @Assert\File(
-    *     maxSize = "2048k",
-    *     mimeTypes={ "image/png" },
-    *     mimeTypesMessage = "Please upload a valid PNG Image"
-    * )
-    */
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @Assert\File(
+     *     maxSize = "2048k",
+     *     mimeTypes={ "image/png" },
+     *     mimeTypesMessage = "Please upload a valid PNG Image"
+     * )
+     */
     private $avatar = "avatars/default-avatar.png";
 
     /**
-    @ORM\Column(type="string", length=100, nullable=true)
-    */
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
     private $lastname;
 
     /**
-    @ORM\Column(type="string", length=100, nullable=true)
-    */
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
     private $firstname;
 
     /**
-    * @ORM\Column(type="datetime", nullable=true)
-    */
+     * @ORM\Column(type="datetime", nullable=true)
+     */
     private $birthday;
 
     /**
-    * 0 is for female, 1 is for male and 2 is for neutral
-    * @ORM\Column(type="integer", nullable=true)
-    */
+     * 0 is for female, 1 is for male and 2 is for neutral
+     * @ORM\Column(type="integer", nullable=true)
+     */
     private $gender;
 
     /**
-    * @ORM\Column(type="string", length=10, nullable=true)
-    */
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
     private $country;
 
     /**
-    * One User has Many articles.
-    * @ORM\OneToMany(targetEntity="Article", mappedBy="author")
-    */
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * One User has Many articles.
+     * @ORM\OneToMany(targetEntity="Article", mappedBy="author")
+     */
     private $articles;
 
     /**
-    * One User has Many comments.
-    * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
-    * @ORM\OrderBy({"created" = "DESC"})
-    */
+     * One User has Many comments.
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
+     * @ORM\OrderBy({"created" = "DESC"})
+     */
     private $comments;
 
     /**
-    * Many Users like Many Articles.
-    * @ORM\ManyToMany(targetEntity="Article", inversedBy="likes")
-    * @ORM\JoinTable(name="likes")
-    */
+     * Many Users like Many Articles.
+     * @ORM\ManyToMany(targetEntity="Article", inversedBy="likes")
+     * @ORM\JoinTable(name="likes")
+     */
     private $likes;
 
     /**
-    * @ORM\Column(type="boolean")
-    */
+     * @ORM\Column(type="boolean")
+     */
     private $privacy = self::IS_PRIVATE;
 
     public function __construct()
@@ -100,8 +105,9 @@ class User extends BaseUser
         $this->likes = new ArrayCollection();
     }
 
-    public function __toString(){
-      return $this->username;
+    public function __toString()
+    {
+        return $this->username;
     }
 
     /**
@@ -270,6 +276,28 @@ class User extends BaseUser
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return User
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

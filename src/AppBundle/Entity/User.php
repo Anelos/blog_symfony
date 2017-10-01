@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User extends BaseUser
 {
     const IS_PRIVATE = 1;
+    const DEFAULT_AVATAR = "uploads/avatars/default-avatar.png";
 
     /**
      * @ORM\Id
@@ -39,7 +40,7 @@ class User extends BaseUser
      *     mimeTypesMessage = "Please upload a valid PNG Image"
      * )
      */
-    private $avatar = "avatars/default-avatar.png";
+    private $avatar;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
@@ -100,6 +101,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->avatar = self::DEFAULT_AVATAR;
         $this->comments = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->likes = new ArrayCollection();
@@ -155,7 +157,7 @@ class User extends BaseUser
      */
     public function getAvatar()
     {
-        return $this->avatar;
+        return "uploads/avatars/".$this->avatar;
     }
 
     /**

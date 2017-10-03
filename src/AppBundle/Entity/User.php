@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User extends BaseUser
 {
     const IS_PRIVATE = 1;
-    const DEFAULT_AVATAR = "uploads/avatars/default-avatar.png";
+    const DEFAULT_AVATAR = "default-avatar.png";
 
     /**
      * @ORM\Id
@@ -109,7 +109,7 @@ class User extends BaseUser
 
     public function __toString()
     {
-        return $this->username;
+        return (string)$this->username;
     }
 
     /**
@@ -157,7 +157,7 @@ class User extends BaseUser
      */
     public function getAvatar()
     {
-        return "uploads/avatars/".$this->avatar;
+        return $this->avatar;
     }
 
     /**

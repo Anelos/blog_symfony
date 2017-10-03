@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Service\FileUploader;
 
 /**
  * User controller.
@@ -14,6 +16,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class UserController extends Controller
 {
+    const AVATAR_DIR = "uploads/avatars/";
+
     /**
      * Lists all user entities.
      *
@@ -28,32 +32,6 @@ class UserController extends Controller
 
         return $this->render('user/index.html.twig', array(
             'users' => $users,
-        ));
-    }
-
-    /**
-     * Creates a new user entity.
-     *
-     * @Route("/new", name="user_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $user = new User();
-        $form = $this->createForm('AppBundle\Form\UserType', $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            return $this->redirectToRoute('user_show', array('id' => $user->getId()));
-        }
-
-        return $this->render('user/new.html.twig', array(
-            'user' => $user,
-            'form' => $form->createView(),
         ));
     }
 
@@ -79,13 +57,25 @@ class UserController extends Controller
      * @Route("/{slug}/edit", name="user_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, User $user)
+    public function editAction(Request $request, User $user, FileUploader $fileUploader)
     {
+        $oldAvatar = $user->getAvatar();
         $deleteForm = $this->createDeleteForm($user);
         $editForm = $this->createForm('AppBundle\Form\UserType', $user);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+            $file = $user->getAvatar();
+            if (isset($file) && $file != "") {
+
+                $fileName = $fileUploader->upload($file);
+
+                $user->setAvatar(self::AVATAR_DIR . $fileName);
+                $fileUploader->removeOldFile($oldAvatar);
+            } else {
+                $user->setAvatar($oldAvatar);
+            }
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -105,7 +95,8 @@ class UserController extends Controller
      * @Route("/{slug}", name="user_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, User $user)
+    public
+    function deleteAction(Request $request, User $user)
     {
         $form = $this->createDeleteForm($user);
         $form->handleRequest($request);
@@ -126,12 +117,12 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(User $user)
+    private
+    function createDeleteForm(User $user)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('user_delete', array('slug' => $user->getSlug())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

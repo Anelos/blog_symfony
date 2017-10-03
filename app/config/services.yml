@@ -37,8 +37,3 @@ services:
     AppBundle\Service\FileUploader:
             arguments:
                 $targetDir: '%avatars_directory%'
-
-    AppBundle\EventListener\AvatarUploadListener:
-            tags:
-                - { name: doctrine.event_listener, event: prePersist }
-                - { name: doctrine.event_listener, event: preUpdate }

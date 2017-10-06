@@ -26,7 +26,12 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @Gedmo\Slug(fields={"username"})
+     * @ORM\Column(type="string")
+     */
+    private $pseudonym;
+
+    /**
+     * @Gedmo\Slug(fields={"pseudonym"})
      * @ORM\Column(length=128, unique=true)
      */
     private $slug;
@@ -110,6 +115,22 @@ class User extends BaseUser
     public function __toString()
     {
         return (string)$this->username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPseudonym()
+    {
+        return $this->pseudonym;
+    }
+
+    /**
+     * @param mixed $pseudonym
+     */
+    public function setPseudonym($pseudonym)
+    {
+        $this->pseudonym = $pseudonym;
     }
 
     /**

@@ -77,6 +77,8 @@ class Article
     */
     private $tags;
 
+    private $tempTag;
+
     /**
     * Many Articles are like by Many User.
     * @ORM\ManyToMany(targetEntity="User", mappedBy="likes")
@@ -379,4 +381,21 @@ class Article
     {
         return $this->likes;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTempTag()
+    {
+        return $this->tempTag;
+    }
+
+    /**
+     * @param mixed $tempTag
+     */
+    public function setTempTag($tempTag)
+    {
+        $this->tempTag = $tempTag;
+    }
+
 }

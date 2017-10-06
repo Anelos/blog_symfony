@@ -448,4 +448,13 @@ class User extends BaseUser
     {
         return $this->likes;
     }
+
+    public function setEmail($email)
+    {
+        $this->setUsername($email);
+
+        return parent::setEmail($email);
+    }
+
+
 }

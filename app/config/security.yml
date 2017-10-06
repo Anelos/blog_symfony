@@ -21,6 +21,8 @@ security:
                  csrf_token_generator: security.csrf.token_manager
             logout:       true
             anonymous:    true
+            remember_me:
+                secret: '%secret%'
 
     encoders:
             FOS\UserBundle\Model\UserInterface: bcrypt
@@ -34,4 +36,3 @@ security:
             - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/admin/, role: ROLE_ADMIN }
-            - { path: ^/user/, role: ROLE_ADMIN}

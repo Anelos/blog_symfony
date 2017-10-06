@@ -5,6 +5,11 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <style>
+            .navbar {
+                border-radius: 0%;
+            }
+        </style>
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
     <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>

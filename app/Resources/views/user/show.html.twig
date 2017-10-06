@@ -1,63 +1,75 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .back {
+            float: right;
+        }
 
+    </style>
+{% endblock %}
 {% block body %}
     <div class="container">
-        <h1>User</h1>
-        <img src="/{{ user.avatar }}" alt=""/>
+        <div class="row">
+            <a class="back" href="{{ app.request.headers.get('referer') }}"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
+            <div class="userheader">
+                <img src="/{{ user.avatar }}" alt="" width="150px"/>
+                <h1>{{ user.pseudonym }}</h1>
+                {% if is_granted('ROLE_USER') and app.user.id == user.id or is_granted("ROLE_ADMIN") %}
+                    <p><a href="{{ path('user_edit', { 'slug': user.slug }) }}">Edit your Profile <span class="glyphicon glyphicon-pencil"></span></a></p>
+                {% endif %}
+            </div>
+            <div class="userbody">
+                {% if user.description is not empty %}
+                    <div class="description">
+                        <h2>Description</h2>
+                        <p>{{ user.description }}</p>
+                    </div>
+                {% endif %}
 
-        <table>
-            <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ user.slug }}</td>
-            </tr>
-            <tr>
-                <th>Avatar</th>
-                <td>{{ user.avatar }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ user.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ user.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Birthday</th>
-                <td>{% if user.birthday %}{{ user.birthday|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Gender</th>
-                <td>{{ user.gender }}</td>
-            </tr>
-            <tr>
-                <th>Country</th>
-                <td>{{ user.country }}</td>
-            </tr>
-            <tr>
-                <th>Privacy</th>
-                <td>{% if user.privacy %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            </tbody>
-        </table>
+                {% if user.privacy == false %}
+                    <div class="privateInfo">
+                        {% if user.lastname %}
+                            <div class="userField">
+                                <h4>Lastname</h4>
+                                <p>{{ user.lastname }}</p>
+                            </div>
+                        {% endif %}
+                        {% if user.firstname %}
+                            <div class="userField">
+                                <h4>Firstname</h4>
+                                <p>{{ user.firstname }}</p>
+                            </div>
+                        {% endif %}
+                        {% if user.birthday %}
+                            <div class="userField">
+                                <h4>Birthday</h4>
+                                <p>{{ user.birthday|date('Y-m-d H:i:s') }}</p>
+                            </div>
+                        {% endif %}
+                        {% if user.gender %}
+                            <div class="userField">
+                                <h4>Gender</h4>
+                                <p>{{ user.gender }}</p>
+                            </div>
+                        {% endif %}
+                        {% if user.country %}
+                            <div class="userField">
+                                <h4>Country</h4>
+                                <p>{{ user.country }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
 
-        <ul>
-            <li>
-                <a href="{{ path('user_index') }}">Back to the list</a>
-            </li>
-            <li>
-                <a href="{{ path('user_edit', { 'slug': user.slug }) }}">Edit</a>
-            </li>
-            <li>
-                {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-                {{ form_end(delete_form) }}
-            </li>
-        </ul>
+            <div class="userFooter">
+                {% if is_granted('ROLE_ADMIN') %}
+                    {{ form_start(delete_form) }}
+                    <input type="submit" value="Delete">
+                    {{ form_end(delete_form) }}
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}

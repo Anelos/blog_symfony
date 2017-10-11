@@ -383,11 +383,11 @@ class Article
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTempTag()
     {
-        return $this->tempTag;
+        return (string)$this->tempTag;
     }
 
     /**

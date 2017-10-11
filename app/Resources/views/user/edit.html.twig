@@ -4,7 +4,7 @@
     {% if is_granted('ROLE_USER') and app.user.id == user.id or is_granted("ROLE_ADMIN") %}
         <div class="container">
 
-            <a class="back" href="{{ app.request.headers.get('referer') }}"><span
+            <a class="back" href="{{ path('user_show', {"slug" : app.user.slug }) }}"><span
                         class="glyphicon glyphicon-arrow-left"></span> Back</a>
             <div class="userEditFormHeader">
                 <h1>User edit</h1>

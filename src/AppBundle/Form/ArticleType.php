@@ -2,7 +2,9 @@
 
 namespace AppBundle\Form;
 
+use KMS\FroalaEditorBundle\Form\Type\FroalaEditorType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,9 +15,52 @@ class ArticleType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('created')->add('updated')->add('content')->add('title')->add('slug')->add('published')->add('author')->add('comments')->add('tags')->add('likes');
+        $builder
+            ->add('title')
+            ->add('tempTag', TextType::class, array('label' => 'Tags'))
+            ->add('content', FroalaEditorType::class, array(
+                'toolbarButtons' => array(
+                    'fullscreen',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikeThrough',
+                    'subscript',
+                    'superscript',
+                    '|',
+                    'fontFamily',
+                    'fontSize',
+                    'color',
+                    'paragraphStyle',
+                    '|',
+                    'paragraphFormat',
+                    'align',
+                    'formatOL',
+                    'formatUL',
+                    'outdent',
+                    'indent',
+                    'quote',
+                    '-',
+                    'insertLink',
+                    'insertImage',
+                    'insertVideo',
+                    'embedly',
+                    'insertTable',
+                    '|',
+                    'emoticons',
+                    'specialCharacters',
+                    'insertHR',
+                    'clearFormatting',
+                    '|',
+                    'undo',
+                    'redo',
+                    '|',
+                    'html',
+                )
+            ))
+            ->add('published');
     }
-    
+
     /**
      * {@inheritdoc}
      */

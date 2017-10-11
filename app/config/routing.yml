@@ -12,3 +12,7 @@ fos_user_register:
 fos_user_resetting:
     resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
     prefix: /resetting
+
+kms_froala_editor:
+    resource: "@KMSFroalaEditorBundle/Resources/config/routing.yml"
+    prefix:   /froalaeditor

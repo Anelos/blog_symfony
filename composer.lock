@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5c95c03e85daabd08c867121bb098684",
-    "content-hash": "f4d8c05b5c72ba9eeac4ef3f24d50278",
+    "hash": "9229c253224cf3519a36290bc4688bb1",
+    "content-hash": "06ce5955521fa1eed6e4901e0661aefb",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1331,6 +1331,58 @@
             "time": "2014-01-12 16:20:24"
         },
         {
+            "name": "kms/froala-editor-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/froala/KMSFroalaEditorBundle.git",
+                "reference": "9b895f4d0c2fb762131985fa33773580b47d9bbb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/froala/KMSFroalaEditorBundle/zipball/9b895f4d0c2fb762131985fa33773580b47d9bbb",
+                "reference": "9b895f4d0c2fb762131985fa33773580b47d9bbb",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3|^7.0",
+                "symfony/form": "^2.3|^3.0",
+                "symfony/framework-bundle": "^2.3|^3.0",
+                "twig/twig": "^1.1|^2.0"
+            },
+            "require-dev": {
+                "symfony/twig-bundle": "^2.3|^3.0",
+                "symfony/yaml": "^2.3|^3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "KMS\\FroalaEditorBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Guionniere",
+                    "email": "simon.guionniere@gmail.com"
+                },
+                {
+                    "name": "Stefan Neculai",
+                    "email": "stefan.neculai@gmail.com"
+                }
+            ],
+            "description": "Provides a Froala editor integration for Symfony 2/3.",
+            "keywords": [
+                "editor",
+                "froala",
+                "wysiwyg"
+            ],
+            "time": "2017-08-25 15:42:26"
+        },
+        {
             "name": "monolog/monolog",
             "version": "1.23.0",
             "source": {
@@ -2553,16 +2605,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.3.9",
+            "version": "v3.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "a9d2f68ae9946000e2bcc3403d218ec0124f992a"
+                "reference": "cfef3b2d505ae4375b17032bd03ed9a3da4b7b43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/a9d2f68ae9946000e2bcc3403d218ec0124f992a",
-                "reference": "a9d2f68ae9946000e2bcc3403d218ec0124f992a",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/cfef3b2d505ae4375b17032bd03ed9a3da4b7b43",
+                "reference": "cfef3b2d505ae4375b17032bd03ed9a3da4b7b43",
                 "shasum": ""
             },
             "require": {
@@ -2702,7 +2754,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-09-11 16:13:42"
+            "time": "2017-10-05 23:40:32"
         },
         {
             "name": "twig/twig",
@@ -2935,16 +2987,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.3.9",
+            "version": "v3.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "27d159bd9bd14a3bd9d3e136081c321a0d621c03"
+                "reference": "6e40d1c8bc4037edf3852c0b29fdd2923c4e2133"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/27d159bd9bd14a3bd9d3e136081c321a0d621c03",
-                "reference": "27d159bd9bd14a3bd9d3e136081c321a0d621c03",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/6e40d1c8bc4037edf3852c0b29fdd2923c4e2133",
+                "reference": "6e40d1c8bc4037edf3852c0b29fdd2923c4e2133",
                 "shasum": ""
             },
             "require": {
@@ -2993,12 +3045,14 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2017-09-05 11:23:06"
+            "time": "2017-10-02 06:54:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "kms/froala-editor-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

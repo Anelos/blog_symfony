@@ -21,7 +21,7 @@ framework:
     validation: { enable_annotations: true }
     #serializer: { enable_annotations: true }
     templating:
-        engines: ['twig']
+        engines: ['twig', 'php']
     default_locale: '%locale%'
     trusted_hosts: ~
     session:
@@ -94,3 +94,16 @@ doctrine_migrations:
     table_name: migration_versions
     name: Application Migrations
     organize_migrations: false # Version >=1.2 Possible values are: "BY_YEAR", "BY_YEAR_AND_MONTH", false
+
+kms_froala_editor:
+    language: "fr"
+    basePath: "/assets"
+    includeJQuery: false
+    includeFontAwesome: false
+    includeJS: true
+    includeCSS: true
+    pluginsDisabled: [ "save", "fullscreen", "inlineStyle", "charCounter", "Spell Checker", "print" ]
+    imageUploadFolder: "/uploads/images"
+    imageUploadPath: "/uploads/images"
+    fileUploadFolder: "/uploads/other"
+    fileUploadPath: "/uploads/other"

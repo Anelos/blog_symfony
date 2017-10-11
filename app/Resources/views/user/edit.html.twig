@@ -17,15 +17,17 @@
                 {{ form_end(edit_form) }}
             </div>
 
-            {{ form_start(delete_form) }}
-            <div class="userEditFormFooter">
-                <input type="submit" value="Delete">
-                {{ form_end(delete_form) }}
-            </div>
 
         </div>
     {% else %}
         <p>You are NOT allowed to access to this Page</p>
         <p>click <a class="back" href="{{ app.request.headers.get('referer') }}"> here</a> to go back</p>
+    {% endif %}
+    {% if is_granted("ROLE_ADMIN") %}
+        {{ form_start(delete_form) }}
+        <div class="userEditFormFooter">
+            <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </div>
     {% endif %}
 {% endblock %}

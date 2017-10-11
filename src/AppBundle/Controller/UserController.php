@@ -108,6 +108,9 @@ class UserController extends Controller
     public
     function deleteAction(Request $request, User $user)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
         $form = $this->createDeleteForm($user);
         $form->handleRequest($request);
 

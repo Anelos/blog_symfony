@@ -5,9 +5,11 @@
         .table > tbody > tr {
             cursor: pointer;
         }
+
         .table > tbody > tr > td {
             vertical-align: middle;
         }
+
         .table > tbody > tr > td > a {
             text-decoration: none;
             color: #414141;
@@ -42,12 +44,15 @@
                 <th>Gender</th>
                 <th>Country</th>
                 <th>Privacy</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             {% for user in users %}
                 <tr data-href="{{ path('user_show', { 'slug': user.slug }) }}">
-                    <td><a href="{{ path('user_show', { 'slug': user.slug }) }}"><strong>{{ user.pseudonym }}</strong></a></td>
+                    <td>
+                        <a href="{{ path('user_show', { 'slug': user.slug }) }}"><strong>{{ user.pseudonym }}</strong></a>
+                    </td>
                     <td><img src="{{ asset( user.avatar ) }}" alt="user avatar"></td>
                     <td>
                         <div>{{ user.description }}</div>
@@ -58,6 +63,13 @@
                     <td>{{ user.gender }}</td>
                     <td>{{ user.country }}</td>
                     <td>{% if user.privacy %}Yes{% else %}No{% endif %}</td>
+                    <td>
+                        {{ form_start(delete_form) }}
+                        <div class="userEditFormFooter">
+                            <input type="submit" value="Delete">
+                            {{ form_end(delete_form) }}
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

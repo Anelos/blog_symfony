@@ -3,11 +3,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Service\FileUploader;
+
 
 /**
  * User controller.
@@ -21,6 +23,7 @@ class UserController extends Controller
     /**
      * Lists all user entities.
      *
+     * @Security("is_granted('ROLE_ADMIN')")
      * @Route("/", name="user_index")
      * @Method("GET")
      */
@@ -59,6 +62,12 @@ class UserController extends Controller
      */
     public function editAction(Request $request, User $user, FileUploader $fileUploader)
     {
+        $usr = $this->get('security.token_storage')->getToken()->getUser();;
+        if (!($this->isGranted("ROLE_USER") && $usr->getId() == $user->getId() || $this->isGranted("ROLE_ADMIN"))) {
+            throw $this->createAccessDeniedException();
+        }
+
+
         $oldAvatar = $user->getAvatar();
         $deleteForm = $this->createDeleteForm($user);
         $editForm = $this->createForm('AppBundle\Form\UserType', $user);
@@ -81,6 +90,7 @@ class UserController extends Controller
 
             return $this->redirectToRoute('user_edit', array('slug' => $user->getSlug()));
         }
+
 
         return $this->render('user/edit.html.twig', array(
             'user' => $user,

@@ -1,0 +1,50 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: anelos
+ * Date: 09/10/17
+ * Time: 15:16
+ */
+
+namespace AppBundle\EventListener;
+
+
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\FOSUserEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
+
+class RedirectAfterRegistrationSubscriber implements EventSubscriberInterface
+{
+    use TargetPathTrait;
+
+    private $router;
+
+    public function __construct(RouterInterface $router, TokenStorageInterface $tokenStorage)
+    {
+
+        $this->router = $router;
+    }
+
+    public function onRegistrationSuccess(FormEvent $event)
+    {
+        $url = $this->getTargetPath($event->getRequest()->getSession(), 'main');
+        if (!$url) {
+            $url = $this->router->generate('homepage');
+        }
+        $response = new RedirectResponse($url);
+        $event->setResponse($response);
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess'
+        ];
+    }
+
+
+}

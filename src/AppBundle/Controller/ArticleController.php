@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Article;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Service\TagConverter;
 
 /**
  * Article controller.
@@ -37,18 +39,25 @@ class ArticleController extends Controller
      * @Route("/new", name="article_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, TagConverter $tagConverter)
     {
+        $em = $this->getDoctrine()->getManager();
         $article = new Article();
         $form = $this->createForm('AppBundle\Form\ArticleType', $article);
         $form->handleRequest($request);
+        $tagToAdd = $em->getRepository('AppBundle:Tag');
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $tags = $tagConverter->tagFindOrCreate($article->getTempTag());
+
+            foreach ($tags as $tag) {
+                $article->addTag($tagToAdd->findOneBy(array('designation' => $tag)));
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
-
-            return $this->redirectToRoute('article_show', array('id' => $article->getId()));
+            return $this->redirectToRoute('article_show', array('slug' => $article->getSlug()));
         }
 
         return $this->render('article/new.html.twig', array(
@@ -60,7 +69,7 @@ class ArticleController extends Controller
     /**
      * Finds and displays a article entity.
      *
-     * @Route("/{id}", name="article_show")
+     * @Route("/{slug}", name="article_show")
      * @Method("GET")
      */
     public function showAction(Article $article)
@@ -76,7 +85,7 @@ class ArticleController extends Controller
     /**
      * Displays a form to edit an existing article entity.
      *
-     * @Route("/{id}/edit", name="article_edit")
+     * @Route("/{slug}/edit", name="article_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Article $article)
@@ -88,7 +97,7 @@ class ArticleController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('article_edit', array('id' => $article->getId()));
+            return $this->redirectToRoute('article_edit', array('slug' => $article->getSlug()));
         }
 
         return $this->render('article/edit.html.twig', array(
@@ -101,7 +110,7 @@ class ArticleController extends Controller
     /**
      * Deletes a article entity.
      *
-     * @Route("/{id}", name="article_delete")
+     * @Route("/{slug}", name="article_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Article $article)
@@ -128,9 +137,8 @@ class ArticleController extends Controller
     private function createDeleteForm(Article $article)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('article_delete', array('id' => $article->getId())))
+            ->setAction($this->generateUrl('article_delete', array('slug' => $article->getSlug())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

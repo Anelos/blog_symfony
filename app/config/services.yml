@@ -48,3 +48,7 @@ services:
         autowire: true
         tags:
             - { name: kernel.event_subscriber }
+
+    AppBundle\Service\TagConverter:
+        arguments: ["@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Tag')", "@doctrine.orm.entity_manager"]
+        autowire: true

@@ -50,5 +50,10 @@ services:
             - { name: kernel.event_subscriber }
 
     AppBundle\Service\TagConverter:
-        arguments: ["@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Tag')", "@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager"]
         autowire: true
+
+    AppBundle\EventListener\TagConverterListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }

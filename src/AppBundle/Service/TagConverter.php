@@ -1,16 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anelos
- * Date: 11/10/17
- * Time: 20:51
- */
 
 namespace AppBundle\Service;
 
-
+use AppBundle\Entity\Article;
 use AppBundle\Entity\Tag;
-use AppBundle\Repository\TagRepository;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Sluggable\Util\Urlizer;
 
@@ -22,20 +15,15 @@ use Gedmo\Sluggable\Util\Urlizer;
 class TagConverter
 {
 
-    /**
-     * @var EntityManager
-     */
-    private $repository;
     private $em;
+    private $article;
 
     /**
      * TagConverter constructor.
-     * @param TagRepository $repository
      * @param EntityManager $em
      */
-    public function __construct(TagRepository $repository, EntityManager $em)
+    public function __construct(EntityManager $em)
     {
-        $this->repository = $repository;
         $this->em = $em;
     }
 
@@ -45,44 +33,29 @@ class TagConverter
      */
     public function tagStringToArray($tagString)
     {
-        return array_map('trim',explode(";", $tagString));
+        return array_map('trim', explode(";", $tagString));
     }
 
     /**
-     * @param $tagSlug
-     * @return bool|object
+     * @param Article $article
+     * @return Article
      */
-    public function isTagExist($tagSlug)
+    public function tagFindOrCreate(Article $article)
     {
-        $tag = $this->repository->findOneTagBySlug($tagSlug);
-
-        if ($tag) {
-            return $tag;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param $tags
-     * @return array
-     */
-    public function tagFindOrCreate($tags)
-    {
-        $tagArray = $this->tagStringToArray($tags);
+        $this->article = $article;
+        $tagArray = $this->tagStringToArray($this->article->getTempTags());
         foreach ($tagArray as $tagName) {
 
-            $tag = $this->isTagExist(Urlizer::urlize($tagName));
+            $tag = $this->em->getRepository('AppBundle:Tag')->findOneTagBySlug(Urlizer::urlize($tagName));
 
             if (!$tag) {
                 $tag = new Tag();
                 $tag->setDesignation($tagName);
-                $tagName = $this->repository->createNewTag($tag);
-            } else {
-                $tagName = $tag->getId();
+                $tag = $this->em->getRepository('AppBundle:Tag')->createNewTag($tag);
             }
+            $this->article->addTag($tag);
         }
 
-        return $tagArray;
+        return $this->article;
     }
 }

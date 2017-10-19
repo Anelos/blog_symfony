@@ -8,97 +8,99 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
-* @ORM\Entity
-* @ORM\Table(name="article")
-*/
+ * @ORM\Entity
+ * @ORM\Table(name="article")
+ */
 class Article
 {
     const IS_PUBLISHED = true;
     const IS_DRAFT = false;
 
     /**
-    * @ORM\Id
-    * @ORM\Column(type="integer")
-    * @ORM\GeneratedValue(strategy="AUTO")
-    */
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     protected $id;
 
     /**
-    * @var \DateTime $created
-    *
-    * @Gedmo\Timestampable(on="create")
-    * @ORM\Column(type="datetime")
-    */
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
     private $created;
 
     /**
-    * @var \DateTime $updated
-    *
-    * @Gedmo\Timestampable(on="update")
-    * @ORM\Column(type="datetime")
-    */
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
     private $updated;
 
     /**
-    * @ORM\Column(type="text")
-    */
+     * @ORM\Column(type="text")
+     */
     private $content;
 
     /**
-    * Many Article have One author.
-    * @ORM\ManyToOne(targetEntity="User", inversedBy="articles")
-    * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-    */
+     * Many Article have One author.
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="articles")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
     private $author;
 
     /**
-    * @ORM\Column(type="string", length=100)
-    */
+     * @ORM\Column(type="string", length=100)
+     */
     private $title;
 
     /**
-    * @Gedmo\Slug(fields={"title"})
-    * @ORM\Column(length=128, unique=true)
-    */
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=128, unique=true)
+     */
     private $slug;
 
     /**
-    * Many Article have Many comments.
-    * @ORM\ManyToMany(targetEntity="Comment", inversedBy="articles")
-    * @ORM\JoinTable(name="articles_comments")
-    * @ORM\OrderBy({"created" = "DESC"})
-    */
+     * Many Article have Many comments.
+     * @ORM\ManyToMany(targetEntity="Comment", inversedBy="articles")
+     * @ORM\JoinTable(name="articles_comments")
+     * @ORM\OrderBy({"created" = "DESC"})
+     */
     private $comments;
 
     /**
-    * Many Article have Many tags.
-    * @ORM\ManyToMany(targetEntity="Tag", inversedBy="articles")
-    * @ORM\JoinTable(name="articles_tags")
-    */
+     * Many Article have Many tags.
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="articles")
+     * @ORM\JoinTable(name="articles_tags")
+     */
     private $tags;
 
-    private $tempTag;
+    private $tempTags;
 
     /**
-    * Many Articles are like by Many User.
-    * @ORM\ManyToMany(targetEntity="User", mappedBy="likes")
-    */
+     * Many Articles are like by Many User.
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="likes")
+     */
     private $likes = 0;
 
     /**
-    * @ORM\Column(type="boolean")
-    */
+     * @ORM\Column(type="boolean")
+     */
     private $published = self::IS_DRAFT;
 
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->likes = new ArrayCollection();
     }
 
-    public function __toString() {
-      return $this->title;
+    public function __toString()
+    {
+        return $this->title;
     }
 
 
@@ -385,17 +387,21 @@ class Article
     /**
      * @return string
      */
-    public function getTempTag()
+    public function getTempTags()
     {
-        return (string)$this->tempTag;
+        if (!$this->getTags()->isEmpty()) {
+            $tagArray = $this->getTags()->toArray();
+            return implode('; ', $tagArray);
+        }
+        return (string)$this->tempTags;
     }
 
     /**
      * @param mixed $tempTag
      */
-    public function setTempTag($tempTag)
+    public function setTempTags($tempTags)
     {
-        $this->tempTag = $tempTag;
+        $this->tempTags = $tempTags;
     }
 
 }

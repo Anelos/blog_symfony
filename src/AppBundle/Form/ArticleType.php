@@ -17,7 +17,7 @@ class ArticleType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('tempTag', TextType::class, array('label' => 'Tags'))
+            ->add('tempTags', TextType::class, array('label' => 'Tags'))
             ->add('content', FroalaEditorType::class, array(
                 'toolbarButtons' => array(
                     'fullscreen',

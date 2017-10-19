@@ -39,20 +39,16 @@ class ArticleController extends Controller
      * @Route("/new", name="article_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request, TagConverter $tagConverter)
+    public function newAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $usr = $this->get('security.token_storage')->getToken()->getUser();
         $article = new Article();
         $form = $this->createForm('AppBundle\Form\ArticleType', $article);
         $form->handleRequest($request);
-        $tagToAdd = $em->getRepository('AppBundle:Tag');
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tags = $tagConverter->tagFindOrCreate($article->getTempTag());
 
-            foreach ($tags as $tag) {
-                $article->addTag($tagToAdd->findOneBy(array('designation' => $tag)));
-            }
+            $article->setAuthor($usr);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);

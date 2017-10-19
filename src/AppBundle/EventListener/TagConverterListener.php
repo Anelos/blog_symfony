@@ -8,7 +8,6 @@
 
 namespace AppBundle\EventListener;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use AppBundle\Entity\Article;
@@ -37,6 +36,7 @@ class TagConverterListener
 
         $this->convertTag($entity);
     }
+
 
     private function convertTag($entity)
     {

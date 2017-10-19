@@ -389,9 +389,8 @@ class Article
      */
     public function getTempTags()
     {
-        if (!$this->getTags()->isEmpty()) {
-            $tagArray = $this->getTags()->toArray();
-            return implode('; ', $tagArray);
+        if(empty($this->tempTags)){
+            return implode("; ", $this->getTags()->toArray());
         }
         return (string)$this->tempTags;
     }

@@ -84,13 +84,15 @@ class ArticleController extends Controller
      * @Route("/{slug}/edit", name="article_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Article $article)
+    public function editAction(Request $request, Article $article, TagConverter $converter)
     {
         $deleteForm = $this->createDeleteForm($article);
         $editForm = $this->createForm('AppBundle\Form\ArticleType', $article);
         $editForm->handleRequest($request);
 
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $article = $converter->tagFindOrCreate($article);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('article_edit', array('slug' => $article->getSlug()));

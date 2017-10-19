@@ -16,7 +16,6 @@ class TagConverter
 {
 
     private $em;
-    private $article;
 
     /**
      * TagConverter constructor.
@@ -42,20 +41,40 @@ class TagConverter
      */
     public function tagFindOrCreate(Article $article)
     {
-        $this->article = $article;
-        $tagArray = $this->tagStringToArray($this->article->getTempTags());
+        $tagArray = $this->tagStringToArray($article->getTempTags());
+        $repository = $this->em->getRepository('AppBundle:Tag');
         foreach ($tagArray as $tagName) {
 
-            $tag = $this->em->getRepository('AppBundle:Tag')->findOneTagBySlug(Urlizer::urlize($tagName));
+            $tag = $repository->findOneTagBySlug(Urlizer::urlize($tagName));
 
             if (!$tag) {
                 $tag = new Tag();
                 $tag->setDesignation($tagName);
-                $tag = $this->em->getRepository('AppBundle:Tag')->createNewTag($tag);
+                $tag = $repository->createNewTag($tag);
             }
-            $this->article->addTag($tag);
-        }
+            if (!$article->getTags()->contains($tag)) {
+                $article->addTag($tag);
+            }
+            $tagName = $tag;
 
-        return $this->article;
+        }
+        $article = $this->removeUndesirableTags($article, $tagArray);
+
+        return $article;
+    }
+
+    public function removeUndesirableTags(Article $article, $tags)
+    {
+        $repository = $this->em->getRepository('AppBundle:Tag');
+        if ($article->getTags()->toArray() != $tags) {
+            $articleTag = $article->getTags()->toArray();
+            foreach ($articleTag as $tag) {
+                if (!in_array($tag, $tags)) {
+                    $article->removeTag($repository->findOneTagBySlug(Urlizer::urlize($tag)));
+                }
+            }
+        }
+        return $article;
+
     }
 }

@@ -38,7 +38,7 @@ class FileUploader
 
     public function removeOldFile($file)
     {
-        if (isset($file) && $file != $this->getTargetDir() . self::DEFAULT_AVATAR) {
+        if (isset($file) && $file != self::DEFAULT_AVATAR) {
             $fs = new Filesystem();
             $fs->remove($file);
         }

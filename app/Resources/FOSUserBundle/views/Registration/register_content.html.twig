@@ -4,7 +4,16 @@
     {{ form_row(form.pseudonym) }}
     {{ form_row(form.email) }}
     {{ form_row(form.plainPassword) }}
-    <div>
-        <input type="submit" value="{{ 'registration.submit'|trans }}"/>
-    </div>
+<div>
+    <input type="submit" value="{{ 'registration.submit'|trans }}"/>
+</div>
 {{ form_end(form) }}
+{% if app.request.hasPreviousSession %}
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}

@@ -3,7 +3,6 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Entity\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -50,11 +49,11 @@ class Comment
     private $author;
 
     /**
-    * Many Comment have One Article.
+    * Many Comments have One Article.
     * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
     * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
     */
-    private $comments;
+    private $article;
 
     public function __toString() {
       return $this->author;
@@ -96,27 +95,27 @@ class Comment
     }
 
     /**
-     * Set comments
+     * Set $article
      *
-     * @param \AppBundle\Entity\Article $comments
+     * @param \AppBundle\Entity\Article $article
      *
      * @return Comment
      */
-    public function setComments(\AppBundle\Entity\Article $comments = null)
+    public function setArticle(\AppBundle\Entity\Article $article = null)
     {
-        $this->comments = $comments;
+        $this->article = $article;
 
         return $this;
     }
 
     /**
-     * Get comments
+     * Get $article
      *
      * @return \AppBundle\Entity\Article
      */
-    public function getComments()
+    public function getArticle()
     {
-        return $this->comments;
+        return $this->article;
     }
 
     /**

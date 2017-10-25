@@ -1,7 +1,53 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
+        <div class="row">
+            <h1>All Articles</h1>
 
+            {% for article in articles %}
+                <div class="article col-sm-12 well-lg">
+                    <a href="{{ path('article_show', { 'slug': article.slug }) }}">
+                        <div class="content">
+                            <h2>{{ article.title }}</h2>
+                            <p class="author">By <span>{{ article.author.pseudonym }}</span></p>
+                            <p class="articleDate">Created
+                                at: {% if article.created %}{{ article.created|date('Y-m-d H:i:s') }}{% endif %}</p>
+                            <p class="tags">{% for tag in article.tags %}{{ tag }} {% endfor %} </p>
+                            <p class="commentCounter">Comment: {{ article.comments|length }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+            {% if nbPage > 1 %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {% if page > 1 %}
+                            <li>
+                                <a href="{{ path('homepage', {'page': page - 1}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for i in 1..nbPage %}
+                            <li
+                                    {% if i == page %}
+                                        class="active"
+                                    {% endif %}
+                            >
+                                <a href="{{ path('homepage', {'page': i}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page < nbPage %}
+                            <li>
+                                <a href="{{ path('homepage', {'page': page + 1}) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
-
-

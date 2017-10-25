@@ -20,6 +20,15 @@
                     {% endif %}
                 </div>
             </div>
+            {% if article.comments|length !=0 %}
+                <div class="commentBlock">
+                    {% for comment in article.comments %}
+                        <div class="well comment">
+                            <div class="avatar"><img src="/{{ comment.author.avatar }}" alt="avatar"></div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
             {% if is_granted("ROLE_ADMIN") %}
                 <ul>

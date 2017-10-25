@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
  * @ORM\Table(name="article")
  */
 class Article
@@ -64,7 +64,7 @@ class Article
 
     /**
      * Many Article have Many comments.
-     * @ORM\ManyToMany(targetEntity="Comment", inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity="Comment", inversedBy="article")
      * @ORM\JoinTable(name="articles_comments")
      * @ORM\OrderBy({"created" = "DESC"})
      */

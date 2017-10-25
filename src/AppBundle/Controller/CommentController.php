@@ -39,11 +39,13 @@ class CommentController extends Controller
      */
     public function newAction(Request $request)
     {
+        $usr = $this->get('security.token_storage')->getToken()->getUser();
         $comment = new Comment();
         $form = $this->createForm('AppBundle\Form\CommentType', $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setAuthor($usr);
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();

@@ -2,20 +2,44 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
+
+
+/**
+ * Class DefaultController
+ * @package AppBundle\Controller
+ * @Route("/")
+ */
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/{page}",
+     *     defaults={"page": "1"},
+     *     requirements={"page": "\d+"},
+     *     name="homepage")
+     * @Method("GET")
      */
-    public function indexAction(Request $request)
+    public function indexAction($page)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);
+        $em = $this->getDoctrine()->getManager();
+        $nbPage = $em->getRepository('AppBundle:Article')->getNumberOfPageForPublished();
+        if ($page > $nbPage && $nbPage > 0) {
+            $page = $nbPage;
+        } elseif ($page < 1) {
+            $page = 1;
+        }
+        dump($page);
+        dump($nbPage);
+
+        $articles = $em->getRepository('AppBundle:Article')->getPublishedArticles($page);
+
+        return $this->render('default/index.html.twig', array(
+            'articles' => $articles,
+            'page' => $page,
+            'nbPage' => $nbPage,
+        ));
     }
 }

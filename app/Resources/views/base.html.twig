@@ -27,9 +27,9 @@
 <body>
 {{ include('component/navbar.html.twig') }}
 {% block body %}{% endblock %}
-{% if not is_granted('ROLE_USER') %}
+{#{% if not is_granted('ROLE_USER') %}
     {{ include('component/registration_modal_block.html.twig') }}
-{% endif %}
+{% endif %}#}
 {% block javascripts %}
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 {% endblock %}

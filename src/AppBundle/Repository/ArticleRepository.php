@@ -34,9 +34,10 @@ class ArticleRepository extends EntityRepository
                 self::ARTICLESPERPAGES * ($page - 1));
     }
 
-    public function getNumberOfPageForPublished($published = true)
+    public function getNumberOfPage($published = true)
     {
         return ceil(count($this->findBy(array("published" => $published))) / self::ARTICLESPERPAGES);
     }
+
 
 }

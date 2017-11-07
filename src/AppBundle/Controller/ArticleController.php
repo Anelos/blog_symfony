@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use AppBundle\Service\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -25,15 +26,12 @@ class ArticleController extends Controller
      *     name="article_index")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function indexAction($page, Pagination $pagination)
     {
         $em = $this->getDoctrine()->getManager();
-        $nbPage = $em->getRepository('AppBundle:Article')->getNumberOfPageForPublished();
-        if ($page > $nbPage) {
-            $page = $nbPage;
-        } elseif ($page < 1) {
-            $page = 1;
-        }
+        $page = $pagination->getPage('AppBundle:Article', $page);
+        $nbPage = $em->getRepository('AppBundle:Article')->getNumberOfPage();
+
 
         $articles = $em->getRepository('AppBundle:Article')->getAllArticles($page);
 

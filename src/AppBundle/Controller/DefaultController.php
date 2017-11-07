@@ -25,14 +25,12 @@ class DefaultController extends Controller
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
-        $nbPage = $em->getRepository('AppBundle:Article')->getNumberOfPageForPublished();
+        $nbPage = $em->getRepository('AppBundle:Article')->getNumberOfPage();
         if ($page > $nbPage && $nbPage > 0) {
             $page = $nbPage;
         } elseif ($page < 1) {
             $page = 1;
         }
-        dump($page);
-        dump($nbPage);
 
         $articles = $em->getRepository('AppBundle:Article')->getPublishedArticles($page);
 

@@ -63,9 +63,8 @@ class Article
     private $slug;
 
     /**
-     * Many Article have Many comments.
-     * @ORM\ManyToMany(targetEntity="Comment", inversedBy="article")
-     * @ORM\JoinTable(name="articles_comments")
+     * One Article has Many Comments.
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article")
      * @ORM\OrderBy({"created" = "DESC"})
      */
     private $comments;

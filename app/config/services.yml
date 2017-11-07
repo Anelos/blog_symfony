@@ -53,6 +53,10 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         autowire: true
 
+    AppBundle\Service\Pagination:
+            arguments: ["@doctrine.orm.entity_manager"]
+            autowire: true
+
     AppBundle\EventListener\TagConverterListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }

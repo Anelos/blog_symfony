@@ -14,7 +14,6 @@ use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class RedirectAfterRegistrationSubscriber implements EventSubscriberInterface
@@ -23,9 +22,8 @@ class RedirectAfterRegistrationSubscriber implements EventSubscriberInterface
 
     private $router;
 
-    public function __construct(RouterInterface $router, TokenStorageInterface $tokenStorage)
+    public function __construct(RouterInterface $router)
     {
-
         $this->router = $router;
     }
 
@@ -45,6 +43,4 @@ class RedirectAfterRegistrationSubscriber implements EventSubscriberInterface
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess'
         ];
     }
-
-
 }

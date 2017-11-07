@@ -20,14 +20,49 @@
                     {% endif %}
                 </div>
             </div>
-            {% if article.comments|length !=0 %}
-                <div class="commentBlock">
-                    {% for comment in article.comments %}
-                        <div class="well comment">
-                            <div class="avatar"><img src="/{{ comment.author.avatar }}" alt="avatar"></div>
-                        </div>
-                    {% endfor %}
+
+            <div class="commentBlock">
+                <a class="btn" role="button" data-toggle="collapse" href="#commentCollapse"
+                   aria-expanded="false" aria-controls="commentCollapse">
+                    Write a comment
+                </a>
+                <div class="collapse" id="commentCollapse">
+                    <div class="well">
+                        <form name="appbundle_comment" method="post" action="{{ path('comment_new') }}">
+                            <div id="appbundle_comment">
+                                <div class="form-group">
+                                    <textarea
+                                            id="appbundle_comment_content" name="appbundle_comment[content]"
+                                            required="required" class="form-control">
+
+                                    </textarea>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden"
+                                           id="appbundle_comment_article" name="appbundle_comment[article]"
+                                           value="{{ article.id }}">
+                                </div>
+                                <input type="hidden" id="appbundle_comment__token" name="appbundle_comment[_token]"
+                                       value="{{ csrf_token('appbundle_comment') }}">
+                            </div>
+                            <input type="submit" value="Create">
+
+                        </form>
+                    </div>
                 </div>
+                {% if article.comments|length !=0 %}
+                {% for comment in article.comments %}
+                    <div class="well comment">
+                        <div class="commentator"><img src="/{{ comment.author.avatar }}" alt="avatar" width="100px">
+                            <p class="comment_author"><a
+                                        href="{{ path('user_show', {'slug': comment.author.slug}) }}">{{ comment.author }}</a>
+                            </p>
+                            <p class="'comment_date">posted at: {{ comment.created|date('Y-m-d H:i:s') }}</p>
+                        </div>
+                        <div class="comment_content">{{ comment.content }}</div>
+                    </div>
+                {% endfor %}
+            </div>
             {% endif %}
 
             {% if is_granted("ROLE_ADMIN") %}

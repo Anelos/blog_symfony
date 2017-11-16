@@ -35,8 +35,8 @@ services:
     #         $someArgument: 'some_value'
 
     AppBundle\Service\FileUploader:
-            arguments:
-                $targetDir: '%avatars_directory%'
+        arguments:
+            $targetDir: '%avatars_directory%'
 
     app.form.registration:
         class: AppBundle\Form\RegistrationFormType
@@ -54,10 +54,14 @@ services:
         autowire: true
 
     AppBundle\Service\Pagination:
-            arguments: ["@doctrine.orm.entity_manager"]
-            autowire: true
+        arguments: ["@doctrine.orm.entity_manager"]
+        autowire: true
 
     AppBundle\EventListener\TagConverterListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
+
+    AppBundle\Service\LikeManager:
+        arguments: ["@doctrine.orm.entity_manager"]
+        autowire: true

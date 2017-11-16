@@ -21,6 +21,21 @@
                 </div>
             </div>
 
+
+            <div class="like">
+                {% if not is_granted('ROLE_USER') %}
+                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{ article.likes|length }}
+                {% else %}
+                    <a href="{{ path('article_like', {'id': article.id } ) }}"
+                       class="{% if app.user in article.likes %}haslike{% else %}nolike{% endif %}"><span
+                                class=" glyphicon
+                       glyphicon-heart" aria-hidden="true"></span> {{ article.likes|length }}</a>
+                {% endif %}
+
+
+            </div>
+
+
             <div class="commentBlock">
                 <a class="btn" role="button" data-toggle="collapse" href="#commentCollapse"
                    aria-expanded="false" aria-controls="commentCollapse">
@@ -31,6 +46,7 @@
                         <form name="appbundle_comment" method="post" action="{{ path('comment_new') }}">
                             <div id="appbundle_comment">
                                 <div class="form-group">
+
                                     <textarea
                                             id="appbundle_comment_content" name="appbundle_comment[content]"
                                             required="required" class="form-control">

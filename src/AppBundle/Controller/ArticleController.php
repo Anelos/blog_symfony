@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use AppBundle\Service\LikeManager;
 use AppBundle\Service\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -148,4 +149,23 @@ class ArticleController extends Controller
             ->setMethod('DELETE')
             ->getForm();
     }
+
+    /**
+     * Displays a form to edit an existing article entity.
+     *
+     * @Route("/{id}/like", name="article_like")
+     * @Method({"GET", "POST"})
+     */
+    public function likeAction(Article $article, LikeManager $likeManager)
+    {
+        if ($this->isGranted('ROLE_USER')) {
+            $usr = $this->get('security.token_storage')->getToken()->getUser();
+            $article = $likeManager->manageLike($article, $usr);
+        }
+
+        return $this->redirectToRoute('article_show', array('slug' => $article->getSlug()));
+
+    }
+
+
 }

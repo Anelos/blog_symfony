@@ -14,7 +14,10 @@
                             <p class="articleDate">Created
                                 at: {% if article.created %}{{ article.created|date('Y-m-d H:i:s') }}{% endif %}</p>
                             <p class="tags">{% for tag in article.tags %}{{ tag }} {% endfor %} </p>
-                            <p class="commentCounter">Comment: {{ article.comments|length }}</p>
+                            <p class="commentCounter"><span class="glyphicon glyphicon-comment"
+                                                            aria-hidden="true"></span> {{ article.comments|length }}</p>
+                            <p class="likeCounter"><span class="glyphicon glyphicon-heart"
+                                                         aria-hidden="true"></span> {{ article.likes|length }}</p>
                         </div>
                     </a>
                 </div>

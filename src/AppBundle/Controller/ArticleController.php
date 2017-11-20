@@ -22,24 +22,19 @@ class ArticleController extends Controller
      * Lists all article entities.
      *
      * @Route("/{page}",
-     *     defaults={"page": "1"},
      *     requirements={"page": "\d+"},
      *     name="article_index")
      * @Method("GET")
      */
-    public function indexAction($page, Pagination $pagination)
+    public function indexAction($page = 1, Pagination $pagination)
     {
-        $em = $this->getDoctrine()->getManager();
-        $page = $pagination->getPage('AppBundle:Article', $page);
-        $nbPage = $em->getRepository('AppBundle:Article')->getNumberOfPage();
-
-
-        $articles = $em->getRepository('AppBundle:Article')->getAllArticles($page);
+        $pagination->setEntityName('AppBundle:Article');
+        $pagination->setPage($page);
 
         return $this->render('article/index.html.twig', array(
-            'articles' => $articles,
-            'page' => $page,
-            'nbPage' => $nbPage,
+            'page' => $pagination->getPage(),
+            'nbPage'=> $pagination->getNbPage(),
+            'articles'=>$pagination->getQueryResult(),
         ));
     }
 

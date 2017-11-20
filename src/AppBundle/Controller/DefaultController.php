@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\Pagination;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,22 +23,16 @@ class DefaultController extends Controller
      *     name="homepage")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function indexAction($page, Pagination $pagination)
     {
-        $em = $this->getDoctrine()->getManager();
-        $nbPage = $em->getRepository('AppBundle:Article')->getNumberOfPage();
-        if ($page > $nbPage && $nbPage > 0) {
-            $page = $nbPage;
-        } elseif ($page < 1) {
-            $page = 1;
-        }
-
-        $articles = $em->getRepository('AppBundle:Article')->getPublishedArticles($page);
+        $pagination->setEntityName('AppBundle:Article');
+        $pagination->setPage($page);
+        $pagination->setCriteria(array("published" => true));
 
         return $this->render('default/index.html.twig', array(
-            'articles' => $articles,
-            'page' => $page,
-            'nbPage' => $nbPage,
+            'page' => $pagination->getPage(),
+            'nbPage'=> $pagination->getNbPage(),
+            'articles'=>$pagination->getQueryResult(),
         ));
     }
 }

@@ -91,6 +91,7 @@ stof_doctrine_extensions:
         default:
             sluggable: true
             timestampable: true
+            softdeleteable: true
 
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"

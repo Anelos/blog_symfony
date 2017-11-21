@@ -124,7 +124,7 @@ class CommentController extends Controller
             $this->addFlash('error', 'Impossible to Delete the Comment');
         }
 
-        return $this->redirectToRoute('comment_index');
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**

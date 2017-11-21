@@ -3,6 +3,7 @@
 {% block body %}
     <div class="container">
         <div class="row">
+
             <div class="articleBlock">
                 <div class="articleHeader">
                     <h1 class="text-center">{{ article.title }}</h1>
@@ -18,21 +19,18 @@
                     {% if article.created != article.updated %}
                         <p>Edited at: {{ article.updated|date('Y-m-d') }}</p>
                     {% endif %}
-                </div>
-            </div>
-
-
-            <div class="like">
-                {% if not is_granted('ROLE_USER') %}
-                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{ article.likes|length }}
-                {% else %}
-                    <a href="{{ path('article_like', {'id': article.id } ) }}"
-                       class="{% if app.user in article.likes %}haslike{% else %}nolike{% endif %}"><span
-                                class=" glyphicon
+                    <div class="like">
+                        {% if not is_granted('ROLE_USER') %}
+                            <span class="glyphicon glyphicon-heart"
+                                  aria-hidden="true"></span> {{ article.likes|length }}
+                        {% else %}
+                            <a href="{{ path('article_like', {'id': article.id } ) }}"
+                               class="{% if app.user in article.likes %}haslike{% else %}nolike{% endif %}"><span
+                                        class=" glyphicon
                        glyphicon-heart" aria-hidden="true"></span> {{ article.likes|length }}</a>
-                {% endif %}
-
-
+                        {% endif %}
+                    </div>
+                </div>
             </div>
 
 
@@ -46,7 +44,6 @@
                         <form name="appbundle_comment" method="post" action="{{ path('comment_new') }}">
                             <div id="appbundle_comment">
                                 <div class="form-group">
-
                                     <textarea
                                             id="appbundle_comment_content" name="appbundle_comment[content]"
                                             required="required" class="form-control">
@@ -62,7 +59,6 @@
                                        value="{{ csrf_token('appbundle_comment') }}">
                             </div>
                             <input type="submit" value="Create">
-
                         </form>
                     </div>
                 </div>
@@ -77,6 +73,13 @@
                         </div>
                         <div class="comment_content">{{ comment.content }}</div>
                     </div>
+                    <form name="form" method="post" action="{{ path('comment_delete', {'id': comment.id}) }}">
+                        <input type="hidden" name="_method"
+                               value="DELETE">
+                        <input type="submit" value="Delete">
+                        <input type="hidden" id="form__token" name="form[_token]"
+                               value="{{ csrf_token('appbundle_comment') }}">
+                    </form>
                 {% endfor %}
             </div>
             {% endif %}

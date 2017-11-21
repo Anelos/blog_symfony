@@ -7,56 +7,63 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
-* @ORM\Entity
-* @ORM\Table(name="comment")
-*/
+ * @ORM\Entity
+ * @ORM\Table(name="comment")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ */
 class Comment
 {
 
     /**
-    * @ORM\Id
-    * @ORM\Column(type="integer")
-    * @ORM\GeneratedValue(strategy="AUTO")
-    */
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     protected $id;
 
     /**
-    * @var \DateTime $created
-    *
-    * @Gedmo\Timestampable(on="create")
-    * @ORM\Column(type="datetime")
-    */
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
     private $created;
 
     /**
-    * @var \DateTime $updated
-    *
-    * @Gedmo\Timestampable(on="update")
-    * @ORM\Column(type="datetime")
-    */
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
     private $updated;
 
     /**
-    * @ORM\Column(type="text")
-    */
+     * @ORM\Column(type="text")
+     */
     private $content;
 
     /**
-    * Many Comment have One author.
-    * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
-    * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-    */
+     * Many Comment have One author.
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
     private $author;
 
     /**
-    * Many Comments have One Article.
-    * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
-    * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-    */
+     * Many Comments have One Article.
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
+     * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     */
     private $article;
 
-    public function __toString() {
-      return $this->author;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
+
+    public function __toString()
+    {
+        return $this->author;
     }
 
 
@@ -188,5 +195,15 @@ class Comment
     public function getContent()
     {
         return $this->content;
+    }
+
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 }

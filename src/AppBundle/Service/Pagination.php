@@ -63,14 +63,13 @@ class Pagination
         $this->criteria = $criteria;
     }
 
-
     public function setOrder($order)
     {
         $this->order = $order;
     }
 
-    public function getQueryResult(){
-
+    public function getQueryResult()
+    {
         return $this->em->getRepository($this->entityName)->getQuery($this->page, $this->criteria, $this->order);
     }
 

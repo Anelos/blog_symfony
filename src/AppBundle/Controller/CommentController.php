@@ -118,6 +118,10 @@ class CommentController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($comment);
             $em->flush();
+            $this->addFlash('success', 'The Comment has been Deleted');
+        } else {
+
+            $this->addFlash('error', 'Impossible to Delete the Comment');
         }
 
         return $this->redirectToRoute('comment_index');
@@ -130,12 +134,12 @@ class CommentController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Comment $comment)
+    private
+    function createDeleteForm(Comment $comment)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('comment_delete', array('id' => $comment->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }
